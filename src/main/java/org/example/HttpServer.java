@@ -31,11 +31,4 @@ public class HttpServer {
         }
         serverSocket.close();
     }
-
-    private static String helloRestService(String path, String query) {
-        return "HTTP/1.1 200 OK\r\n"
-                + "Content-Type: application/json\r\n"
-                + "\r\n"
-                + "{\"name\":\"Jhon\", \"age\":30, \"car\":null}";
-    }
 }
