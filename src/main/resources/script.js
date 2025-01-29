@@ -1,12 +1,24 @@
-function cambiarColor() {
-    document.body.style.backgroundColor = getRandomColor();
-}
+document.getElementById("postForm").addEventListener("submit", function(event) {
+    event.preventDefault(); // Evita que la página se recargue
 
-function getRandomColor() {
-    const letters = '0123456789ABCDEF';
-    let color = '#';
-    for (let i = 0; i < 6; i++) {
-        color += letters[Math.floor(Math.random() * 16)];
-    }
-    return color;
+    const mensaje = document.getElementById("mensaje").value;
+
+    fetch("/save", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ mensaje: mensaje })
+    })
+    .then(response => response.json())
+    .then(data => {
+        document.getElementById("serverResponse").innerText = "Servidor dice: " + data.message;
+    })
+    .catch(error => {
+        console.error("Error en la petición:", error);
+    });
+});
+
+// Función para cambiar el color de fondo
+function cambiarColor() {
+    document.body.style.backgroundColor = 
+        "#" + Math.floor(Math.random()*16777215).toString(16);
 }

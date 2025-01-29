@@ -1,11 +1,6 @@
 package org.example;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.io.PrintWriter;
+import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.URI;
@@ -13,66 +8,72 @@ import java.nio.charset.StandardCharsets;
 
 public class FileReader {
 
-    String relativePath = "resources/";
-
-    public FileReader(){
-
+    public FileReader() {
     }
 
-    public void handleRequest(ServerSocket socket, Socket clientSocket) throws Exception{
+    public void handleRequest(ServerSocket socket, Socket clientSocket) throws Exception {
         OutputStream out = clientSocket.getOutputStream();
         BufferedReader in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
 
         String inputLine;
         boolean isFirstLine = true;
-        String file = "";   
+        String file = "";
+        String method = "";
+        StringBuilder requestBody = new StringBuilder();
+        boolean isPost = false;
+
         while ((inputLine = in.readLine()) != null) {
             if (isFirstLine) {
-                file = inputLine.split(" ")[1];
+                // Extraer el método HTTP y la ruta
+                String[] requestParts = inputLine.split(" ");
+                method = requestParts[0];  // "GET" o "POST"
+                file = requestParts[1];    // Ruta solicitada
                 isFirstLine = false;
 
+                if (method.equals("POST")) {
+                    isPost = true;  // Marcar como una solicitud POST
+                }
             }
+
+            // Leer el cuerpo de la solicitud POST
+            if (isPost && inputLine.isEmpty()) {
+                while (in.ready()) {
+                    requestBody.append((char) in.read());
+                }
+                break;
+            }
+
             System.out.println("Received: " + inputLine);
             if (!in.ready()) {
                 break;
             }
         }
-        // Construye y procesa la ruta
-        URI requestFile = new URI(file);
-       
-        String filePath = requestFile.getPath().substring(1); // Remueve el '/'
-        serveFile(filePath, out);
-        
 
-        //if (requestFile.getPath().startsWith("/index")) {
-          //  serveFile("index.html", out);
-        //}
+        if (method.equals("GET")) {
+            URI requestFile = new URI(file);
+            String filePath = requestFile.getPath().substring(1);
+            serveFile(filePath, out);
+        } else if (method.equals("POST")) {
+            handlePostRequest(file, requestBody.toString(), out);
+        }
 
-    
         out.close();
         in.close();
         clientSocket.close();
-        
     }
 
-
     private static void serveFile(String filePath, OutputStream output) throws IOException {
-        // Cargar el archivo desde el classpath
         boolean isError = false;
         InputStream fileStream = FileReader.class.getClassLoader().getResourceAsStream(filePath);
-        
+
         if (fileStream == null) {
-            
             fileStream = FileReader.class.getClassLoader().getResourceAsStream("400badrequest.html");
             isError = true;
-
         }
-    
+
         byte[] fileBytes = fileStream.readAllBytes();
-    
-        // Determinar el tipo de contenido
-        String contentType = "application/octet-stream"; 
-    
+        String contentType = "application/octet-stream";
+
         if (filePath.endsWith(".html")) {
             contentType = "text/html";
         } else if (filePath.endsWith(".png")) {
@@ -86,29 +87,42 @@ public class FileReader {
         } else if (filePath.endsWith(".js")) {
             contentType = "application/javascript";
         }
-    
-        // Enviar encabezados HTTP
+
         PrintWriter writer = new PrintWriter(output, true);
         if (isError) {
             writer.println("HTTP/1.1 400 Bad Request");
             contentType = "text/html";
-            System.err.println("si entra en el if");
-        }else{
+        } else {
             writer.println("HTTP/1.1 200 OK");
-            System.err.println("no esta entrando al if");
         }
 
         writer.println("Content-Type: " + contentType);
         writer.println("Content-Length: " + fileBytes.length);
-        writer.println(); 
-    
-        // Enviar el contenido del archivo
+        writer.println();
         output.write(fileBytes);
-
-        //System.out.println(fileBytes);
         output.flush();
     }
-    
-    
 
+    private void handlePostRequest(String path, String body, OutputStream output) throws IOException {
+        PrintWriter writer = new PrintWriter(output, true);
+
+        if ("/save".equals(path)) {
+            System.out.println("Datos recibidos en POST: " + body);
+
+            String response = "{ \"message\": \"Datos guardados correctamente\" }";
+
+            writer.println("HTTP/1.1 200 OK");
+            writer.println("Content-Type: application/json");
+            writer.println("Content-Length: " + response.length());
+            writer.println();
+            writer.println(response);
+        } else {
+            writer.println("HTTP/1.1 404 Not Found");
+            writer.println("Content-Type: text/plain");
+            writer.println();
+            writer.println("Error 404: Endpoint no encontrado");
+        }
+
+        writer.flush();
+    }
 }

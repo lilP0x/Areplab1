@@ -3,16 +3,25 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HOLA</title>
+    <title>Arep</title>
     <link rel="stylesheet" href="/styles.css">
-    <script src="script.js"></script>
+    <script src="script.js" defer></script>
 </head>
 <body>
 
     <div class="container">
         <h1>Se logró encontrar este archivo</h1>
         <img src="/laminemipapa.png" alt="No se encontró la imagen">
+
         <button onclick="cambiarColor()">Cambiar color de fondo</button>
+
+        <h2>Enviar mensaje al servidor</h2>
+        <form id="postForm">
+            <input type="text" id="mensaje" placeholder="Escribe tu mensaje..." required>
+            <button type="submit">Enviar</button>
+        </form>
+
+        <p id="serverResponse"></p>
     </div>
 
 </body>
