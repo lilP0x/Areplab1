@@ -62,6 +62,7 @@ public class FileReader {
         clientSocket.close();
     }
 
+    
     private static void serveFile(String filePath, OutputStream output) throws IOException {
         boolean isError = false;
         InputStream fileStream = FileReader.class.getClassLoader().getResourceAsStream(filePath);
