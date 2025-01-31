@@ -27,7 +27,7 @@ public class FileReader {
                 // Extraer el método HTTP y la ruta
                 String[] requestParts = inputLine.split(" ");
                 method = requestParts[0];  // "GET" o "POST"
-                file = requestParts[1];    // Ruta solicitada
+                file = requestParts[1];    
                 isFirstLine = false;
 
                 if (method.equals("POST")) {
@@ -112,7 +112,7 @@ public class FileReader {
 
             String response = "{ \"message\": \"Datos guardados correctamente\" }";
 
-            writer.println("HTTP/1.1 200 OK");
+            writer.println("HTTP/1.1 201 OK");
             writer.println("Content-Type: application/json");
             writer.println("Content-Length: " + response.length());
             writer.println();

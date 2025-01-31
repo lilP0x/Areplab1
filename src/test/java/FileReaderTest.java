@@ -62,7 +62,7 @@ public class FileReaderTest {
                 "Content-Length: " + requestBody.length() + "\r\n" +
                 "\r\n" + requestBody;
         String response = sendRequest(request);
-        assertTrue(response.contains("HTTP/1.1 200 OK"));
+        assertTrue(response.contains("HTTP/1.1 201 OK"));
     }
 
     @Test

@@ -17,8 +17,15 @@ document.getElementById("postForm").addEventListener("submit", function(event) {
     });
 });
 
-// Función para cambiar el color de fondo
+document.addEventListener("DOMContentLoaded", function() {
+    const button = document.getElementById("colorButton");
+
+    if (button) {
+        button.addEventListener("click", cambiarColor);
+    }
+});
+
 function cambiarColor() {
-    document.body.style.backgroundColor = 
-        "#" + Math.floor(Math.random()*16777215).toString(16);
+    document.body.style.backgroundColor =
+        "#" + Math.floor(Math.random() * 16777215).toString(16);
 }

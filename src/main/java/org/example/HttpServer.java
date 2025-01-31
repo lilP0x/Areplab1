@@ -12,7 +12,7 @@ public class HttpServer {
             fileReader = new FileReader();
             
         } catch (IOException e) {
-            System.err.println("Could not listen on port: 35000.");
+            System.err.println("No pude escuchar en el puerto: 35000.");
             System.exit(1);
         }
 
