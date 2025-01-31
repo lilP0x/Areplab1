@@ -37,6 +37,8 @@ mvn clean package
 java -cp target/classes org.example.HttpServer
 ```
 
+![alt text](/src/main/resources/readmeImages/image-2.png)
+
 ##  Pruebas y Evaluación
 ###  Pruebas Manuales
 1. **Abrir el navegador y acceder al servidor**
@@ -64,7 +66,10 @@ para ejecutarlas tendrea que ejecutar el siguiente comando desde la terminal
 ```sh
 mvn test
 ```
-![alt text](image.png)
+
+![alt text](/src/main/resources/readmeImages/image-1.png)
+
+
 
 
 ###  Arquitectura del Proyecto
@@ -77,7 +82,9 @@ El servidor sigue una arquitectura basada en sockets:
 
 Para una mejor ejemplificacion tendremos el siguiente diagrama de arquitectura.
 
-## 🔥 Conclusión
+![alt text](/src/main/resources/readmeImages/image.png)
+
+##  Conclusión
 Este proyecto demuestra cómo funciona un servidor web simple en Java sin frameworks. Permite explorar la arquitectura de aplicaciones distribuidas y la comunicación HTTP de bajo nivel.
 
 # Build With 
