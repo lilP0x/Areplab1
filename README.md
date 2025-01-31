@@ -26,6 +26,11 @@ Este proyecto es un servidor web simple implementado en Java que permite manejar
 ```sh
 git clone https://github.com/lilP0x/Areplab1.git
 ```
+Cabe resaltar que es necesario tener en tu maquina
+
+Servicios REST: ClientHandler en la clase clientHandler, manejan operaciones CRUD en objetos JSON y consulta a html estaticos guardados en el servidor.
+Servidor : HttpServer maneja las conexiones y enruta las solicitudes a los servicios correspondientes. ClientHandler Gestiona la comunicación con el cliente, procesa la solicitud y decide si debe retornar un archivo estático o delegar la solicitud a un servicio REST.
+Archivos estáticos: Almacenados en el directorio
 
 ### 2️ Compilar el servidor
 ```sh
